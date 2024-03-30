@@ -1,0 +1,110 @@
+<section class='container d-flex justify-content-evenly mt-3 mb-4'>
+
+	{{! Sección para solicitar la id de un usuario y para cambiar su rol }}
+	<div class='border border-secondary rounded shadow p-3'>
+
+		<h3 class='mb-3'>Cambiar Rol de un Usuario </h3>
+
+		{{! Obtener Id }}
+		<form action=''>
+			<input
+				type='text'
+				id='userEmail'
+				class='form-control w-75 mb-2'
+				name='userEmail'
+				placeholder='Correo del usuario'
+			/>
+			<button
+				id='getIdBtn'
+				class='btn btn-dark border border-dark shadow mt-1 mb-3'
+				type='button'
+			>Obtener Id del Usuario</button>
+			{{! loader }}
+			<span
+				class='ms-3 me-3 spinner-border text-dark d-none'
+				id='waitingGetIdProcess'
+			></span>
+			<input
+				type='reset'
+				class='btn btn-secondary border border-dark shadow mt-1 mb-3'
+				value='Borrar'
+			/>
+		</form>
+		<div id='getIdMessage' class='d-none mt-3 alert w-75'></div>
+
+		{{! Cambiar rol }}
+		<form action=''>
+			<input
+				type='text'
+				id='userId'
+				class='form-control w-75 mb-2'
+				name='userId'
+				placeholder='Id del Usuario'
+			/>
+
+			<button
+				id='toggleRoleBtn'
+				class='btn btn-dark border border-dark shadow mt-1'
+				type='button'
+			>Cambiar Rol del Usuario</button>
+			{{! loader }}
+			<span
+				class='ms-3 me-3 spinner-border text-dark d-none'
+				id='waitingToggleRoleProcess'
+			></span>
+			<input
+				type='reset'
+				class='btn btn-secondary border border-dark shadow mt-1'
+				value='Borrar'
+			/>
+		</form>
+		<div id='toggleRoleMessage' class='mt-3 d-none alert w-75'></div>
+
+	</div>
+
+	{{! Sección para solicitar el listado de usuarios }}
+	<div class='border border-secondary rounded shadow p-3 ms-2 me-2'>
+		<h3 class='mb-3'>Obtener listado de usuarios </h3>
+
+		<button
+			id='getUsersListBtn'
+			class='btn btn-primary border border-dark shadow mt-1'
+			type='button'
+		>Ver Lista de Usuarios</button>
+		{{! loader }}
+		<span
+			class='ms-3 spinner-border text-dark d-none'
+			id='waitingGetUsersProcess'
+		></span>
+	</div>
+
+	{{! Sección para solicitar eliminación de usuarios inactivos }}
+	<div class='border border-secondary rounded shadow p-3'>
+		<h3 class='mb-3'>Eliminar usuarios inactivos </h3>
+
+		<button
+			id='deleteInactiveUsersBtn'
+			class='btn btn-danger border border-dark shadow mt-1'
+			type='button'
+		>Eliminar Usuarios</button>
+		{{! loader }}
+		<span
+			class='ms-3 spinner-border text-dark d-none'
+			id='waitingDeleteProcess'
+		></span>
+		<div id='deleteInactiveUsersMessage' class='mt-3 d-none alert w-75'></div>
+	</div>
+
+</section>
+<hr />
+
+{{! Sección para renderizar el listado de usuarios }}
+<section class='mt-3'>
+	<div class='ms-3 text-center' id='getUsersListTitle'></div>
+	<div
+		id='getUsersListMessage'
+		class='container d-flex justify-content-start'
+	></div>
+</section>
+
+<script src='/static/js/adminPage.js'></script>

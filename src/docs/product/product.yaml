@@ -1,0 +1,228 @@
+paths:
+   /api/products/:
+      get:
+         sumary: Obtiene todos los productos
+         tags:
+            - Products
+         responses:
+            '200':
+               description: Se obtuvieron los productos satisfactoriamente desde la base de datos
+               content:
+                  application/json:
+                     schema:
+                        type: array
+                        items:
+                           $ref: '#components/schemas/Product'
+            '500':
+               description: Error interno del servidor, usualmente generado por la falta de conexión a la base de datos
+      post:
+         sumary: Agrega un nuevo producto
+         tags:
+            - Products
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: '#components/requestBodies/createProduct'
+         responses:
+            '201':
+               description: El producto fue agregado satisfactoriamente a la base de datos
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#components/schemas/Product'
+            '401':
+               description: El usuario no está logueado, usualmente generado por tener un token inválido
+            '400':
+               description: Error generado por la falta de una o más propiedades requeridas para el ingreso de un producto
+            '500':
+               description: Error interno del servidor, usualmente generado por la falta de conexión con la base de datos
+   /api/products/{pid}:
+      get:
+         sumary: Obtiene un producto mediante su ID
+         tags:
+            - Products
+         parameters:
+            - name: pid
+              in: path
+              required: true
+              description: ID del producto solicitado
+              schema:
+                 $type: String
+         responses:
+            '200':
+               description: Se obtuvo el producto satisfactoriamente desde la base de datos
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#components/schemas/Product'
+            '500':
+               description: Error interno del servidor, usualmente generado por la falta de conexión a la base de datos o el ingreso de una ID de producto errónea
+      put:
+         sumary: Actualiza un producto
+         tags:
+            - Products
+         parameters:
+            - name: pid
+              in: path
+              required: true
+              description: ID del producto que se desea actualizar
+              schema:
+                 $type: String
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: '#components/requestBodies/updateProduct'
+         responses:
+            '200':
+               description: El producto fue actualizado satisfactoriamente en la base de datos
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#components/schemas/Product'
+            '401':
+               description: El usuario no está logueado, usualmente generado por tener un token inválido
+            '500':
+               description: Error interno del servidor, usualmente generado por intentar actualizar productos propios o el ingreso de una ID de producto errónea
+      delete:
+         sumary: Elimina un producto
+         tags:
+            - Products
+         parameters:
+            - name: pid
+              in: path
+              required: true
+              description: ID del producto que se desea eliminar
+              schema:
+                 $type: String
+         responses:
+            '204':
+               description: El producto fue eliminado satisfactoriamente desde la base de datos
+            '401':
+               description: El usuario no está logueado, usualmente generado por tener un token inválido
+            '500':
+               description: Error interno del servidor, usualmente generado por intentar eliminar productos propios o el ingreso de una ID de producto errónea
+components:
+   schemas:
+      Product:
+         type: object
+         properties:
+            _id:
+               type: ObjectId
+               description: Id autogenerada por Mongo
+            title:
+               type: String
+               description: Nombre del producto
+            description:
+               type: String
+               description: Descripción del producto
+            code:
+               type: String
+               description: Código interno del producto
+            price:
+               type: Number
+               description: Precio del producto
+            status:
+               type: Boolean
+               description: Estado del producto
+            stock:
+               type: Number
+               description: Cantidad de productos en stock
+            category:
+               type: String
+               description: Categoría del producto
+            owner:
+               type: String
+               description: Creador del producto
+            thumbnail:
+               type: Array
+               description: Listado de rutas o urls de las imágenes del producto
+         example:
+            _id: ObjectId("60cfd49b0d2a8f24a8a23456")
+            title: Smartphone XYZ
+            description: Un excelente smartphone con características avanzadas
+            code: XYZ123
+            price: 1000000
+            status: true
+            stock: 100
+            category: Electronics
+            owner: usuario@ecommerce.com
+            thumbnail:
+               - https://example.com/thumbnail1.jpg
+               - https://example.com/thumbnail2.jpg
+   requestBodies:
+      createProduct:
+         type: object
+         properties:
+            title:
+               type: String
+               description: Nombre del producto
+            description:
+               type: String
+               description: Descripción del producto
+            code:
+               type: String
+               description: Código interno del producto
+            price:
+               type: Number
+               description: Precio del producto
+            status:
+               type: Boolean
+               description: Estado del producto
+            stock:
+               type: Number
+               description: Cantidad de productos en stock
+            category:
+               type: String
+               description: Categoría del producto
+            thumbnail:
+               type: Array
+               description: Listado de rutas o urls de las imágenes del producto
+         example:
+            title: Smartphone ABC
+            description: Un smartphone con cámara de alta resolución y batería de larga duración
+            code: ABC456
+            price: 700000
+            status: true
+            stock: 50
+            category: Electronics
+            thumbnail: https://example.com/thumbnail3.jpg
+      updateProduct:
+         type: object
+         properties:
+            title:
+               type: String
+               description: Nombre del producto
+            description:
+               type: String
+               description: Descripción del producto
+            code:
+               type: String
+               description: Código interno del producto
+            price:
+               type: Number
+               description: Precio del producto
+            status:
+               type: Boolean
+               description: Estado del producto
+            stock:
+               type: Number
+               description: Cantidad de productos en stock
+            category:
+               type: String
+               description: Categoría del producto
+            thumbnail:
+               type: Array
+               description: Listado de rutas o urls de las imágenes del producto
+         example:
+            title: Smartphone DEF
+            description: Un smartphone con pantalla OLED y procesador de última generación
+            code: DEF007
+            price: 800000
+            status: true
+            stock: 75
+            category: Electronics
+            thumbnail: https://example.com/thumbnail4.jpg

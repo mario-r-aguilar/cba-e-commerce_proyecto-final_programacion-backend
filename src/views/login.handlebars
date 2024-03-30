@@ -1,0 +1,48 @@
+<section class='container'>
+	<h2 class='mb-3'>Ingresar</h2>
+
+	<form
+		class='border border-secondary rounded shadow w-50 p-2 pt-3 pb-3'
+		action='/api/sessions/login'
+		method='post'
+	>
+		<input
+			class='form-control ms-3 w-50 mb-2'
+			type='email'
+			placeholder='Correo'
+			name='email'
+		/>
+		<input
+			class='form-control ms-3 w-50 mb-2'
+			type='password'
+			placeholder='Password'
+			name='password'
+		/>
+		<button
+			class='ms-3 btn btn-primary border border-dark shadow mt-3'
+			type='submit'
+		>Ingresar</button>
+
+	</form>
+
+	{{#if error}}
+		<!-- Muestra un mensaje de error si hubo un error con las credenciales de logueo -->
+		<div class='ms-3 alert alert-danger w-25'>{{error}}</div>
+	{{/if}}
+
+	<a
+		class='ms-4 btn btn-dark border border-dark shadow d-inline'
+		href='/api/sessions/github'
+	>Ingresar con GitHub</a>
+
+	<a
+		class='ms-4 btn btn-dark border border-dark shadow d-inline'
+		href='/reset-password'
+	>Olvide mi password</a>
+
+	<a
+		class='ms-4 btn btn-dark border border-dark shadow d-inline'
+		href='/register'
+	>Registrarse</a>
+
+</section>

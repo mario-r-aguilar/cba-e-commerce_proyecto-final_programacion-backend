@@ -1,0 +1,80 @@
+<section class='container'>
+	<h2 class='mt-3 mb-3'>Subir archivos</h2>
+
+	<form
+		class='border border-secondary rounded shadow w-50 mt-3 p-4 pt-3 pb-3'
+		action='/api/sessions/{{userId}}/documents'
+		enctype='multipart/form-data'
+		method='post'
+	>
+		<label class='fw-bold form-label' for='profileImage'>Imagen de perfil
+			(PNG/JPG)</label>
+		<input
+			class='mb-3 form-control'
+			type='file'
+			name='profileImage'
+			id='profileImage'
+		/>
+
+		<label
+			class='fw-bold form-label'
+			for='personal-identification'
+		>Identificación (PDF)</label>
+		<input
+			class='mb-3 form-control'
+			type='file'
+			name='personal-identification'
+			id='personal-identification'
+		/>
+
+		<label class='fw-bold form-label' for='proof-of-address'>Comprobante de
+			domicilio (PDF)</label>
+		<input
+			class='mb-3 form-control'
+			type='file'
+			name='proof-of-address'
+			id='proof-of-address'
+		/>
+
+		<label
+			class='fw-bold form-label'
+			for='proof-of-account-status'
+		>Comprobante de estado de cuenta (PDF)</label>
+		<input
+			class='mb-3 form-control'
+			type='file'
+			name='proof-of-account-status'
+			id='proof-of-account-status'
+		/>
+
+		<label class='fw-bold form-label' for='userDocument'>Otro documento
+			relevante (PDF)</label>
+		<input
+			class='mb-3 form-control'
+			type='file'
+			name='userDocument'
+			id='userDocument'
+		/>
+
+		<label class='fw-bold form-label' for='productImage'>Imagen de un producto
+			(PNG/JPG)</label>
+		<input
+			class='mb-3 form-control'
+			type='file'
+			name='productImage'
+			id='productImage'
+		/>
+
+		<button
+			class='ms-3 btn btn-primary border border-dark shadow mt-3'
+			type='submit'
+		>Subir archivos</button>
+
+	</form>
+
+	{{#if error}}
+		<!-- Muestra un mensaje de error si hubo un error con las credenciales de logueo -->
+		<div class='ms-3 alert alert-danger w-25'>{{error}}</div>
+	{{/if}}
+
+</section>

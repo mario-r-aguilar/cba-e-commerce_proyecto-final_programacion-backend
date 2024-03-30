@@ -1,0 +1,272 @@
+paths:
+   /api/carts/:
+      get:
+         summary: Obtiene el listado de carritos
+         tags:
+            - Carts
+         responses:
+            '200':
+               description: Se obtuvo el listado de carritos satisfactoriamente desde la base de datos
+               content:
+                  application/json:
+                     schema:
+                        type: array
+                        items:
+                           $ref: '#components/schemas/Cart'
+            '500':
+               description: Error interno del servidor, usualmente generado por la falta de conexión a la base de datos
+      post:
+         summary: Agrega un carrito
+         tags:
+            - Carts
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: '#components/requestBodies/createCart'
+         responses:
+            '201':
+               description: El carrito fue agregado satisfactoriamente a la base de datos
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#components/schemas/Cart'
+            '500':
+               description: Error interno del servidor, usualmente generado por la falta de conexión con la base de datos
+   /api/carts/{cid}:
+      get:
+         summary: Obtiene el carrito solicitado
+         tags:
+            - Carts
+         parameters:
+            - name: cid
+              in: path
+              required: true
+              description: ID del carrito solicitado
+              schema:
+                 $type: String
+         responses:
+            '200':
+               description: Se obtuvo el carrito satisfactoriamente desde la base de datos
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#components/schemas/Cart'
+            '500':
+               description: Error interno del servidor, usualmente generado por la falta de conexión a la base de datos o el ingreso de una ID de carrito errónea
+      put:
+         summary: Cambia el contenido del carrito por otro listado de productos (actualiza la totalidad del carrito)
+         tags:
+            - Carts
+         parameters:
+            - name: cid
+              in: path
+              required: true
+              description: ID del carrito que se desea actualizar
+              schema:
+                 $type: String
+         requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: '#components/requestBodies/updateAllCart'
+         responses:
+            '200':
+               description: Se actualizo todo el contenido del carrito
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#components/schemas/Cart'
+            '500':
+               description: Error interno del servidor, usualmente generado por recibir un listado de productos con un formato incorrecto o el ingreso de una ID de carrito errónea
+      delete:
+         summary: Elimina todo el contenido del carrito (vaciar carrito)
+         tags:
+            - Carts
+         parameters:
+            - name: cid
+              in: path
+              required: true
+              description: ID del carrito que se desea eliminar
+              schema:
+                 $type: String
+         responses:
+            '204':
+               description: Se elimino todo el contenido del carrito
+            '500':
+               description: Error interno del servidor, usualmente generado por el ingreso de una ID de carrito errónea
+   /api/carts/{cid}/products/{pid}:
+      post:
+         summary: Agrega un producto al carrito
+         tags:
+            - Carts
+         parameters:
+            - name: cid
+              in: path
+              required: true
+              description: ID del carrito que se desea modificar
+              schema:
+                 $type: String
+            - name: pid
+              in: path
+              required: true
+              description: ID del producto que se desea agregar
+              schema:
+                 $type: String
+         responses:
+            '201':
+               description: Se agrego un producto al carrito
+               content:
+                  application/json:
+                     schema:
+                        $ref: '#components/schemas/Cart'
+            '500':
+               description: Error interno del servidor, usualmente generado por intentar agregar un producto propio al carrito o por el ingreso de una ID de carrito o producto errónea
+         put:
+            summary: Actualiza la cantidad de un producto del carrito
+            tags:
+               - Carts
+            parameters:
+               - name: cid
+                 in: path
+                 required: true
+                 description: ID del carrito que se desea modificar
+                 schema:
+                    $type: String
+               - name: pid
+                 in: path
+                 required: true
+                 description: ID del producto al que se le modificará la cantidad
+                 schema:
+                    $type: String
+            requestBody:
+            required: true
+            content:
+               application/json:
+                  schema:
+                     $ref: '#components/requestBodies/updateQuantity'
+            responses:
+               '200':
+                  description: Se actualizo la cantidad del producto
+                  content:
+                  application/json:
+                     schema:
+                        $ref: '#components/schemas/Cart'
+               '500':
+                  description: Error interno del servidor, usualmente generador por el ingreso de una ID de carrito o producto errónea
+         delete:
+            summary: Elimina un producto del carrito
+            tags:
+               - Carts
+            parameters:
+               - name: cid
+                 in: path
+                 required: true
+                 description: ID del carrito que se desea modificar
+                 schema:
+                    $type: String
+               - name: pid
+                 in: path
+                 required: true
+                 description: ID del producto que se desea eliminar
+                 schema:
+                    $type: String
+            responses:
+               '204':
+                  description: Se elimino el producto del carrito
+               '500':
+                  description: Error interno del servidor, usualmente generador por el ingreso de una ID de carrito o producto errónea
+   /api/carts/{cid}/purchase:
+      get:
+         summary: Efectúa la compra de los productos del carrito que tengan stock
+         tags:
+            - Carts
+         parameters:
+            - name: cid
+              in: path
+              required: true
+              description: ID del carrito que contiene los productos a comprar
+              schema:
+                 $type: String
+         responses:
+            '200':
+               description: Se efectuo la compra de los productos del carrito que tenían stock disponible
+               content:
+                  application/json:
+                     schema:
+                        type: object
+                        properties:
+                           status:
+                              type: String
+                              description: Estado de la operación (success o error)
+                           ticket:
+                              type: String
+                              description: Número de ticket generado para la compra
+                           productsWithoutStock:
+                              type: Array
+                              description: Lista de IDs de productos sin stock
+                              items:
+                                 type: String
+                        example:
+                           status: 'success'
+                           ticket: 'TICKET-64ea27e6bdb155ef69540707'
+                           productsWithoutStock:
+                              - 64ea27e6bdb155ef69540710
+                              - 64ea27e6bdb155ef69540711
+            '401':
+               description: El usuario no está logueado, usualmente generado por tener un token inválido
+            '404':
+               description: No se encontró el carrito, usualmente generado por el ingreso de una ID de carrito errónea
+            '500':
+               description: Error interno del servidor, usualmente generado por la falta de conexión a la base de datos
+components:
+   schemas:
+      Cart:
+         type: object
+         properties:
+            _id:
+               type: ObjectId
+               description: Id autogenerada por Mongo
+            products:
+               type: Array
+               description: Listado de productos agregados al carrito y sus cantidades
+         example:
+            _id: 64ea27e6bdb155ef69540708
+            products:
+               - product: 64ea27e6bdb155ef69540707
+                 quantity: 2
+               - product: 64ea27e6bdb155ef69540708
+                 quantity: 1
+   requestBodies:
+      createCart:
+         type: object
+         properties:
+            products:
+               type: Array
+               description: Listado de productos agregados al carrito y sus cantidades
+         example:
+            products:
+               - product: 64ea27e6bdb155ef69540716
+                 quantity: 1
+               - product: 64ea27e6bdb155ef69540715
+                 quantity: 1
+      updateAllCart:
+         type: array
+         items:
+            type: object
+            properties:
+               product:
+                  type: ObjectId
+                  description: ID del producto
+               quantity:
+                  type: Number
+                  description: Cantidad del producto
+         example:
+            - product: '64ea27e6bdb155ef69540725'
+              quantity: 5
+      updateQuantity:
+         type: number
+         description: Nueva cantidad del producto
+         example: 5

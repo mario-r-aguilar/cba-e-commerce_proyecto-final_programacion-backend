@@ -1,0 +1,14 @@
+[
+	{
+		"_id": "e53aa0da-4344-41c5-bf64-d34ab6dc8868",
+		"name": "test2",
+		"lastname": "test2",
+		"email": "test2@test.com",
+		"age": 25,
+		"cart": { "_id": "eaf36802-3664-4334-a7d6-43aeddcde672", "products": [] },
+		"password": "$2b$10$IfI.NwOUjWdbez7iVhooxeOu7ULc3beSFNVEWXWjbJEnWBLxssYam",
+		"role": "USER",
+		"documents": [],
+		"last_connection": "2024-03-30T20:35:22.859Z"
+	}
+]

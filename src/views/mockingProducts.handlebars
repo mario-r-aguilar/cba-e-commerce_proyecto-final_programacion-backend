@@ -1,0 +1,37 @@
+<h1 class='text-center mb-5'>Mocking de productos</h1>
+<div class='d-flex me-4 mb-3 mt-5 flex-row justify-content-between flex-wrap'>
+
+	{{! Bloque de renderizado del mocking de productos }}
+	{{#if productsList.length}}
+		{{#each productsList}}
+			<div class='card p-3 mb-3 shadow-lg' style='width: 18rem;'>
+				<img
+					src='{{this.thumbnail}}'
+					class='card-img-top'
+					alt='{{this.title}}'
+				/>
+				<div class='card-body'>
+					<h5 class='card-title mb-3 ps-1 pb-1 text-light bg-dark'>
+						<b class='card-title'>{{this.title}}</b>
+					</h5>
+					<span class='card-text'>Descripción: </span>
+					<p class='card-text'> <b>{{this.description}}</b> </p>
+					<span class='card-text'>Precio: </span>
+					<p class='card-text'> <b>$ {{this.price}}</b> </p>
+					<span class='card-text'>Categoría: </span>
+					<p class='card-text'> <b>{{this.category}}</b> </p>
+					<span class='card-text'>Stock: </span>
+					<p class='card-text'> <b>{{this.stock}}</b> </p>
+					<span class='card-text'>Status: </span>
+					<p class='card-text'> <b>{{this.status}}</b> </p>
+					<span class='card-text'>Code: </span>
+					<p class='card-text'> <b>{{this.code}}</b> </p>
+					<span class='card-text'>Id: </span>
+					<p class='card-text'> <b>{{this._id}}</b> </p>
+				</div>
+			</div>
+		{{/each}}
+	{{else}}
+		<h4 class='text-bg-danger p-3 text-start'>Mocking de productos vacio</h4>
+	{{/if}}
+</div>

@@ -1,0 +1,114 @@
+<h1 class='text-center mt-3 mb-3'>Carrito</h1>
+
+{{! Información necesaria para cart.js (getCartId varía según la persistencia seleccionada)}}
+{{#if isMongoPersistence}}
+	<input type='hidden' id='getCartId' value='{{user.cart}}' />
+{{else}}
+	<input type='hidden' id='getCartId' value='{{user.cart._id}}' />
+{{/if}}
+<input type='hidden' id='getUserRole' value='{{user.role}}' />
+
+{{! Aquí se mostrará el precio total de los productos que se encuentran en el carrito }}
+<div class='alert alert-info w-50' id='totalPurchase'></div>
+
+{{! Botón para volver al listado de productos y botón de finalización de la compra }}
+<div
+	class='d-flex p-2 mb-2 flex-row justify-content-start flex-wrap buttonsSecction'
+>
+	<button
+		class='btn btn-dark btnBack border border-dark shadow ms-5 mb-3'
+		id='btnBackToBuy'
+	>Seguir comprando</button>
+	<button
+		class='btn btn-primary border border-dark shadow ms-5 me-3 mb-3'
+		id='btnFinishBuy'
+	>Finalizar la compra</button>
+	{{! Aquí se mostrará el loader mientras la operación se finaliza}}
+	<span
+		class='ms-3 me-3 spinner-border text-dark d-none'
+		id='waitingPurchasingProcess'
+	></span>
+
+	{{! Sección para Mercado Pago }}
+	<div id='wallet_container'></div>
+
+	<button
+		class='btn btn-success border border-dark shadow ms-5 mb-3'
+		id='btnEmptyCart'
+	>Vaciar carrito</button>
+</div>
+
+{{! Aquí se mostrará el detalle de la compra una vez finalizada}}
+<div class='d-none alert alert-dark' id='purchaseDetailOk'>
+	<h4>Solo se procesaran productos con stock</h4>
+	<p>
+		Los productos que no posean stock permaneceran en tu carrito luego de la
+		compra, para que pueda adquirirlos cuando nuevamente esten disponibles.
+	</p>
+</div>
+<div class='d-none alert alert-danger' id='purchaseDetailFail'>
+	<h4>No se puede procesar la compra</h4>
+	<p>
+		El carrito está vacío o bien todos los productos que agregaste no poseen
+		stock por el momento. Intenta más tarde. Te pedimos disculpas por las
+		molestias ocasionadas.
+	</p>
+</div>
+
+{{! Aquí se renderizan los productos del carrito }}
+<div
+	class='d-flex p-2 mb-2 flex-row justify-content-evenly flex-wrap'
+	id='containerCartProducts'
+>
+
+	{{#if cart.products.length}}
+		{{#each cart.products}}
+
+			<div
+				class='card p-3 mb-3 shadow-lg'
+				id='cardCartProduct'
+				style='width: 18rem;'
+			>
+				<div class='card-body'>
+					<h6 class='card-title mb-3 ps-1 pb-1 text-light bg-secondary'>
+						<b class='card-title'>{{this.product.title}}</b>
+					</h6>
+					<img
+						class='card-img-top'
+						src='{{this.product.thumbnail}}'
+						alt='{{this.product.title}}'
+					/>
+					<p class='card-text'><b>Precio unitario: ${{this.product.price}}</b></p>
+					<p class='card-text'><b>Cantidad: {{this.quantity}} </b> </p>
+					<span>
+						<input
+							type='number'
+							class='productInCartQuantity w-25'
+							id='productQty_{{this.product._id}}'
+							min='1'
+							value='{{this.quantity}}'
+						/>
+					</span>
+					<button
+						class='btn btn-success btnProductInCart btnChangeProductQty mb-3 mt-3'
+						data-product-id='{{this.product._id}}'
+					>Cambiar cantidad</button>
+					<button
+						class='btn btn-danger btnProductInCart btnRemoveProduct mb-3'
+						data-product-id='{{this.product._id}}'
+					>Quitar Producto</button>
+				</div>
+			</div>
+
+		{{/each}}
+	{{else}}
+
+		<h4 class='text-bg-danger p-3 text-start'>No tienes productos en el
+			carrito</h4>
+	{{/if}}
+
+</div>
+
+{{! SDK de Mercado Pago }}
+<script src='https://sdk.mercadopago.com/js/v2'></script>
+<script src='/static/js/cart.js'></script>

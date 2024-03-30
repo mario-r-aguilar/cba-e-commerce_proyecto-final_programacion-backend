@@ -1,0 +1,73 @@
+<h1 class='mb-5 mt-3'>Lista de productos en tiempo real</h1>
+
+{{! Botón para limitar la cantidad de productos por pantalla y botón de búsqueda }}
+<div class='d-flex p-2 mb-2 flex-row justify-content-start flex-wrap'>
+	<div class='input-group m-3 w-25'>
+		<label class='input-group-text' for='limitProducts'>Productos por
+			pantalla:
+		</label>
+		<input
+			class='form-control'
+			id='limitProducts'
+			type='number'
+			min='0'
+			placeholder='50'
+		/>
+		<button
+			class='btn btn-dark border border-dark shadow'
+			id='btnLimitProducts'
+		>Limitar</button>
+	</div>
+
+	<div class='input-group m-3 w-50'>
+		<label class='input-group-text' for='searchInput'>Buscar en la página:
+		</label>
+		<input
+			class='form-control'
+			type='text'
+			id='searchInput'
+			placeholder='Buscar'
+		/>
+		<button
+			class='btn btn-dark border border-dark shadow'
+			id='btnSearchOnPage'
+		>Buscar </button>
+	</div>
+</div>
+
+{{! Aquí se renderizará el formulario según el botón que presionemos }}
+<div class='w-50 ms-3' id='form'></div>
+
+{{! Botones para manejo de formularios }}
+<button
+	class='btn btn-success border border-dark shadow ms-3 mb-3'
+	id='btnAdd'
+	onclick='renderAddForm()'
+>Agregar Productos</button>
+
+<button
+	class='btn btn-warning border border-dark shadow ms-3 mb-3'
+	id='btnUpdate'
+	onclick='renderUpdateForm()'
+>Actualizar Productos</button>
+
+<button
+	class='btn btn-danger border border-dark shadow ms-3 mb-3'
+	id='btnDel'
+	onclick='renderDelForm()'
+>Eliminar Productos</button>
+{{! loader }}
+<span
+	class='ms-3 me-3 spinner-border text-dark d-none'
+	id='waitingDeleteProcess'
+></span>
+
+{{! Aquí se renderizarán los productos }}
+<div
+	class='d-flex p-2 mb-2 flex-row justify-content-evenly flex-wrap'
+	id='productsList'
+></div>
+
+{{! Librerías necesarias para ejecutar socket.io en el cliente }}
+<script src='/socket.io/socket.io.js'></script>
+<script src='/static/js/realTimeProducts.js'></script>

@@ -1,0 +1,47 @@
+<section class='container'>
+	<h2 class='mb-3'> Registrar Nuevo Usuario </h2>
+
+	<form
+		class='border border-secondary rounded shadow w-50 p-2 pt-3 pb-3'
+		action='/api/sessions/register'
+		method='post'
+	>
+
+		<input
+			class='form-control ms-3 w-50 mb-2'
+			type='text'
+			placeholder='Nombre'
+			name='name'
+		/>
+		<input
+			class='form-control ms-3 w-50 mb-2'
+			type='text'
+			placeholder='Apellido'
+			name='lastname'
+		/>
+		<input
+			class='form-control ms-3 w-50 mb-2'
+			type='email'
+			placeholder='Correo'
+			name='email'
+		/>
+		<input
+			class='form-control ms-3 w-50 mb-2'
+			type='number'
+			placeholder='Edad'
+			name='age'
+		/>
+		<input
+			class='form-control ms-3 w-50 mb-2'
+			type='password'
+			placeholder='Password'
+			name='password'
+		/>
+		<button
+			class='btn btn-primary border border-dark shadow ms-3 mt-3'
+			type='submit'
+		>Registrarse</button>
+
+	</form>
+
+</section>

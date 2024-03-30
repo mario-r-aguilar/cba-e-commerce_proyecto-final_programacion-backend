@@ -1,0 +1,205 @@
+<div id="pageComplete"> 
+	{{!-- Información necesaria para home.js (getCartId varías según la persistencia seleccionada) --}} 
+	{{#if isMongoPersistence}}
+		<input type='hidden' id='getCartId' value='{{user.cart}}' /> 
+	{{else}}
+		<input type='hidden' id='getCartId' value='{{user.cart._id}}' /> 
+	{{/if}}
+	<input type='hidden' id='getUserRole' value='{{user.role}}' />
+	<input type='hidden' id='isMongoPersistence' value='{{isMongoPersistence}}' />
+	
+	<div class='d-flex me-4 ms-5 mb-3 flex-row justify-content-between flex-wrap'>			
+		
+		{{!-- Botón de la página de administración de documentos (solo usuarios y usuarios premium) --}}
+		{{#if isUserOrPremium}}
+		<a class="navbar-brand me-3 ms-3" href="/uploaddocuments/{{userId}}"> <img class="img-fluid rounded mt-3" src="/static/img/upload.png" width="38" height="38" alt="upload.png"> <span class="fw-bold align-bottom">Subir archivos</span> </a>	
+		{{/if}}
+
+		{{!-- Botón de la página de administración de productos (solo administradores y usuarios premium) --}}
+		{{#if isAdminOrPremium}}
+		<a class="navbar-brand me-3 ms-3" href="/realtimeproducts"> <img class="img-fluid rounded mt-3" src="/static/img/admin_product.png" width="38" height="38" alt="admin_product.png"> <span class="fw-bold align-bottom">Administrar Productos</span> </a>
+		{{/if}}	
+
+		{{!-- Botón de la página de administración de usuarios (solo administradores) --}}
+		{{#if isAdmin}}
+		<a class="navbar-brand me-3 ms-3" href="/adminpage"> <img class="img-fluid rounded mt-3" src="/static/img/admin_users.png" width="38" height="38" alt="admin_users.png"> <span class="fw-bold align-bottom">Administrar Usuarios</span> </a>
+		{{/if}}
+
+		{{!-- Link al carrito del usuario (varía según la persistencia seleccionada) --}} 
+		{{#if isMongoPersistence}}
+			<a class='nav-link' style="width: 3%; height: 3%" href="/carts/{{user.cart}}"> <img class="img-fluid mt-3" style="width: 100%; height: 100%" id="cartImg" src="/static/img/cart_img.svg" alt="cart_img"> </a> 
+		{{else}}
+			<a class='nav-link' style="width: 3%; height: 3%" href="/carts/{{user.cart._id}}"> <img class="img-fluid mt-3" style="width: 100%; height: 100%" id="cartImg" src="/static/img/cart_img.svg" alt="cart_img"> </a> 
+		{{/if}} 
+	</div> 
+
+	<h1 class="ps-4 ms-5 mt-5">Lista de productos</h1> 
+	
+	{{!-- Código para persistencia MONGO --}}
+	{{#if isMongoPersistence}}
+
+	{{!-- Bloque de filtros y botones para su uso --}} 	
+	<div class='d-flex p-2 mb-2 flex-row justify-content-evenly flex-wrap' id='containerSearchOptions'>
+		<div class="input-group m-3 w-25">
+			<label class="input-group-text" for='limit'>Limitar productos: </label>
+			<input class="form-control" id='limit' type='number' value='{{productsList.limit}}' /> </div>
+		<div class="input-group m-3 w-25">
+			<label class="input-group-text" for='page'>Ir a Página: </label>
+			<input class="form-control" id='page' type='number' value='{{productsList.page}}' /> </div>
+		<div class="input-group m-3 w-25">
+			<label class="input-group-text" for='productName'>Buscar por nombre: </label>
+			<input class="form-control" id='productName' type='text' value='{{productsList.docs.title}}' /> </div>
+		<div class="input-group m-3 w-25">
+			<label class="input-group-text" for="category">Categorías:</label>
+			<select class="form-select" id="category">
+				<option value="">Elige...</option>
+				<option value="Motorola">Motorola</option>
+				<option value="Samsung">Samsung</option>
+				<option value="Xiaomi">Xiaomi</option>
+				<option value="iPhone">iPhone</option>
+				<option value="TCL">TCL</option>
+			</select>
+		</div>
+		<div class="input-group m-3 w-25">
+			<label class="input-group-text" for="sort">Ordenar por precio:</label>
+			<select class="form-select" id="sort">
+				<option value="">Elige...</option>
+				<option value="1">Ascendente</option>
+				<option value="-1">Descendente</option>
+			</select>
+		</div>
+		<div class="input-group m-3 w-25 bg-dark bg-opacity-75 rounded">
+			<label class="input-group-text" for="status">Solo productos disponibles:</label>
+			<input class="form-check-input p-2  mt-2 ms-4" type='checkbox' id='status' checked /> </div>
+	</div>
+
+	<div> <span class="me-5"></span>
+		<button class="btn btn-primary border border-dark shadow ms-5 me-3" id="btnApplyFilters">Aplicar filtros</button>
+		<button class="btn btn-primary border border-dark shadow ms-3" id="btnCleanFilters">Limpiar filtros</button>
+	</div>
+
+	{{!-- Aquí se mostrará un error al querer acceder a páginas inexistentes --}}
+	<div id="validatePageValue">
+		<div id="pageError"></div>
+		<input id="totalPageValue" type="hidden" value="{{productsList.totalPages}}"> </div> 
+		
+		
+	{{!-- Bloque de información de paginación --}}
+	<div class='d-flex p-2 mt-3 mb-3 flex-row justify-content-center flex-wrap' id='containerPageInfo'>
+		<div>
+			<h4 class="mt-2 mb-2 me-4 d-inline">Total de Productos: {{productsList.totalDocs}}</h4>
+			<h4 class="mt-2 mb-2 me-4 d-inline">|</h4>
+			<h4 class="mt-2 mb-2 me-4 d-inline">Página: {{productsList.page}} / {{productsList.totalPages}}</h4> </div>
+	</div> 
+	
+	{{!-- Bloque de botones de navegación por páginas --}}
+	<div class='d-flex p-2 mb-2 flex-row justify-content-evenly flex-wrap' id='containerPageOptions'>
+		<input id='prevPage' type='hidden' value='{{productsList.prevPage}}' />
+		<button class="btn btn-dark shadow" {{#unless productsList.hasPrevPage}} style='display: none;' 
+		{{/unless}} id='btnPrev'> Página Anterior </button>
+
+		<input id='nextPage' type='hidden' value='{{productsList.nextPage}}' />
+		<button class="btn btn-dark shadow" {{#unless productsList.hasNextPage}} style='display: none;' 
+		{{/unless}} id='btnNext'> Página Siguiente </button>
+	</div> 
+	
+	{{!-- Código para persistencia FILE --}} 
+	{{else}}
+
+	{{!-- Bloque de filtro, búsqueda y botones para su uso --}} 
+	<div class='d-flex p-2 mb-2 flex-row justify-content-start flex-wrap'>
+		<div class='input-group m-3 w-25'>
+			<label class='input-group-text' for='limitProducts'>Productos por pantalla: </label>
+			<input class='form-control' id='limitProducts' type='number' min='0' placeholder='50' />
+			<button class='btn btn-dark border border-dark shadow' id='btnLimitProducts'>Limitar</button>
+		</div>
+		<div class='input-group m-3 w-50'>
+			<label class='input-group-text' for='searchInput'>Buscar en la página: </label>
+			<input class='form-control' type='text' id='searchInput' placeholder='Buscar' />
+			<button class='btn btn-dark border border-dark shadow' id='btnSearchOnPage'>Buscar </button>
+		</div>
+		<div class='input-group m-3 '>
+		<button class="btn btn-primary border border-dark shadow " id="btnCleanFilters">Limpiar filtros</button>
+		</div>
+	</div> 
+
+	{{/if}} 
+	
+	{{! Bloque de renderizado de productos }} 
+	
+	{{#if isMongoPersistence}}
+	<div class='d-flex p-2 mb-2 flex-row justify-content-evenly flex-wrap' id='containerProducts'> 
+
+		{{#if productsList.docs.length}} 
+		{{#each productsList.docs}}
+
+		<div class='card p-3 mb-3 shadow-lg' style='width: 18rem;'> 
+			<img src='{{this.thumbnail}}' class='card-img-top' alt='{{this.title}}' />
+			<div class='card-body'>
+				<h5 class='card-title mb-3 ps-1 pb-1 text-light bg-dark'>
+					<b class='card-title'>{{this.title}}</b>
+				</h5> 
+				<span class='card-text'>Descripción: </span>
+				<p class='card-text'> <b>{{this.description}}</b> </p> 
+				<span class='card-text'>Precio: </span>
+				<p class='card-text'> <b>$ {{this.price}}</b> </p> 
+				<span class='card-text'>Categoría: </span>
+				<p class='card-text'> <b>{{this.category}}</b> </p> 
+				{{#if this._id}}
+				<input type="hidden" id="getProductId" value="{{this._id}}"> 
+				{{/if}}
+
+				<button class="btn btn-success shadow mb-3 btnAddProductToCart">Agregar al Carrito</button>
+				<p id="productAddSuccess_{{this._id}}"></p>
+				<button class="btn btn-primary shadow mb-3 btnProductDetail">Ver detalles</button>
+			</div>
+		</div> 
+
+		{{/each}} 
+		{{else}}
+
+		<h4 class='text-bg-danger p-3 text-start'>No tienes productos disponibles</h4> 
+		
+		{{/if}}
+
+	</div> 
+
+	{{!-- Render de productos para persistencia FILE --}}
+	{{else}} 		
+	<div class='d-flex p-2 mb-2 flex-row justify-content-evenly flex-wrap' id='containerProductsFile'> 
+		
+		{{#if productsList.length}} 
+		{{#each productsList}}
+
+		<div class='card p-3 mb-3 shadow-lg' style='width: 18rem;'> 
+			<img src='{{this.thumbnail}}' class='card-img-top' alt='{{this.title}}' />
+			<div class='card-body'>
+				<h5 class='card-title mb-3 ps-1 pb-1 text-light bg-dark'>
+					<b class='card-title'>{{this.title}}</b>
+				</h5> 
+				<span class='card-text'>Descripción: </span>
+				<p class='card-text'> <b>{{this.description}}</b> </p> 
+				<span class='card-text'>Precio: </span>
+				<p class='card-text'> <b>$ {{this.price}}</b> </p> 
+				<span class='card-text'>Categoría: </span>
+				<p class='card-text'> <b>{{this.category}}</b> </p> 
+				{{#if this._id}}
+				<input type="hidden" id="getProductId" value="{{this._id}}"> 
+				{{/if}}
+
+				<button class="btn btn-success shadow mb-3 btnAddProductToCart disabled">Agregar al Carrito</button>
+				<p id="productAddSuccess_{{this._id}}"></p>
+				<button class="btn btn-primary shadow mb-3 btnProductDetail">Ver detalles</button>
+			</div>
+		</div> 
+
+		{{/each}} 
+		{{else}}
+
+			<h4 class='text-bg-danger p-3 text-start'>No tienes productos disponibles</h4> 
+		{{/if}} 
+	</div> 
+	{{/if}} 
+</div>
+
+<script src="/static/js/home.js"></script>
