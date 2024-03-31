@@ -51,7 +51,7 @@ const renderOneProduct = (id) => {
 			<div class='d-flex me-4  mb-3 flex-row justify-content-between flex-wrap'>
 				<h1 class="ps-4 ms-5 mt-3">Detalles del Producto</h1>
 
-				<a class='nav-link' style="width: 3%; height: 3%" href="/carts/6557f7d19005197b1b189ce1">
+				<a class='nav-link' style="width: 3%; height: 3%" href="/carts/${cartID}">
 					<img class="img-fluid mt-3" style="width: 100%; height: 100%" id="cartImg" src="/static/img/cart_img.svg" alt="cart_img">
 				</a>			
 			</div>
