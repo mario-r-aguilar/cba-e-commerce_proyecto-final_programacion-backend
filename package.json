@@ -1,12 +1,13 @@
 {
-	"name": "entregable_14",
+	"name": "proyecto_final_programacion_backend",
 	"version": "1.0.0",
-	"description": "entregable_14",
+	"description": "E-commerce de celulares con la pasarela de pagos de Mercado Pago",
 	"type": "module",
 	"main": "src/app.js",
 	"scripts": {
 		"start": "node src/app.js",
-		"dev": "nodemon src/app.js",
+		"devmongo": "nodemon src/app.js",
+		"devfile": "nodemon src/app.js -p FILE",
 		"test": "mocha test/testingProyect.test.js"
 	},
 	"keywords": [
