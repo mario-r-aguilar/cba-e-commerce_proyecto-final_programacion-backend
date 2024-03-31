@@ -8,6 +8,7 @@ export const getPublicKey = async (req, res) => {
 	try {
 		const publicKey = JSON.stringify(config.mpPublicKey);
 
+		req.logger.info(`Public key obtain`);
 		res.status(200).send(publicKey);
 	} catch (error) {
 		req.logger.fatal('It is not possible to obtain the public key.');
@@ -35,8 +36,8 @@ export const createOrderMP = async (req, res) => {
 			],
 			back_urls: {
 				success: `${config.serverUrl}/api/carts/${cid}/purchase`,
-				failure: `${config.serverUrl}/carts/${cid}`,
-				pending: `${config.serverUrl}/carts/${cid}`,
+				failure: `${config.serverUrl}/paymentfailure`,
+				pending: `${config.serverUrl}/paymentpending`,
 			},
 			auto_return: 'approved',
 		};
@@ -44,6 +45,7 @@ export const createOrderMP = async (req, res) => {
 		const preference = new Preference(client);
 		const resultPreference = await preference.create({ body });
 
+		req.logger.info(`Created preference id`);
 		res.status(201).send({ id: resultPreference.id });
 	} catch (error) {
 		req.logger.fatal('It is not possible to create order.');
