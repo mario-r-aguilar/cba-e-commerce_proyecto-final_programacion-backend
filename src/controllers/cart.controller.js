@@ -121,7 +121,8 @@ export const purchaseProductsInCart = async (req, res) => {
 
 		await CartService.purchaseProductsInCart(cid, user);
 
-		res.status(200).redirect(`/carts/${cid}`);
+		req.logger.info(`The purchase was completed satisfactorily.`);
+		res.status(200).redirect(`/paymentsuccess`);
 	} catch (error) {
 		req.logger.fatal('The purchase of the products could not be made');
 		res.status(500).send(`Internal Server Error: ${error}`);
