@@ -190,11 +190,30 @@ export const uploadUserFiles = async (req, res) => {
 	}
 };
 
+export const renderPaymentSuccess = async (req, res) => {
+	try {
+		const userData = req.session.user;
+		const user = new UserDTO(userData);
+
+		req.logger.info('Successful payment');
+		res.render('paymentSuccess', {
+			user,
+			title: 'Pago exitoso',
+		});
+	} catch (error) {
+		req.logger.fatal(
+			'Failed to render the success payment information page.'
+		);
+		res.status(500).send(`Error interno del servidor: ${error}`);
+	}
+};
+
 export const renderPaymentFailure = async (req, res) => {
 	try {
 		const userData = req.session.user;
 		const user = new UserDTO(userData);
 
+		req.logger.info('Failed payment');
 		res.render('paymentFailure', {
 			user,
 			title: 'Pago fallido',
@@ -213,6 +232,7 @@ export const renderPaymentPending = async (req, res) => {
 
 		await CartService.deleteAllProductsfromCart(cartId);
 
+		req.logger.info('Payment pending');
 		res.render('paymentPending', {
 			user,
 			title: 'Pago pendiente',
@@ -220,23 +240,6 @@ export const renderPaymentPending = async (req, res) => {
 	} catch (error) {
 		req.logger.fatal(
 			'Failed to render the pending payment information page.'
-		);
-		res.status(500).send(`Error interno del servidor: ${error}`);
-	}
-};
-
-export const renderPaymentSuccess = async (req, res) => {
-	try {
-		const userData = req.session.user;
-		const user = new UserDTO(userData);
-
-		res.render('paymentSuccess', {
-			user,
-			title: 'Pago exitoso',
-		});
-	} catch (error) {
-		req.logger.fatal(
-			'Failed to render the success payment information page.'
 		);
 		res.status(500).send(`Error interno del servidor: ${error}`);
 	}
