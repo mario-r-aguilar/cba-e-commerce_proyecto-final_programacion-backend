@@ -99,8 +99,7 @@ Para mayores detalles sobre rutas, schemas, parámetros, requests y responses de
 
 ## Autor
 
-### Mario Aguilar
-
+**Mario Aguilar**
 **GitHub:** https://github.com/mario-r-aguilar
 **LinkedIn:** https://www.linkedin.com/in/mario-r-aguilar/
 
