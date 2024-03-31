@@ -189,3 +189,55 @@ export const uploadUserFiles = async (req, res) => {
 		res.status(500).send(`Error interno del servidor: ${error}`);
 	}
 };
+
+export const renderPaymentFailure = async (req, res) => {
+	try {
+		const userData = req.session.user;
+		const user = new UserDTO(userData);
+
+		res.render('paymentFailure', {
+			user,
+			title: 'Pago fallido',
+		});
+	} catch (error) {
+		req.logger.fatal('Failed to render the failed payment information page.');
+		res.status(500).send(`Error interno del servidor: ${error}`);
+	}
+};
+
+export const renderPaymentPending = async (req, res) => {
+	try {
+		const userData = req.session.user;
+		const user = new UserDTO(userData);
+		const cartId = userData.cart;
+
+		await CartService.deleteAllProductsfromCart(cartId);
+
+		res.render('paymentPending', {
+			user,
+			title: 'Pago pendiente',
+		});
+	} catch (error) {
+		req.logger.fatal(
+			'Failed to render the pending payment information page.'
+		);
+		res.status(500).send(`Error interno del servidor: ${error}`);
+	}
+};
+
+export const renderPaymentSuccess = async (req, res) => {
+	try {
+		const userData = req.session.user;
+		const user = new UserDTO(userData);
+
+		res.render('paymentSuccess', {
+			user,
+			title: 'Pago exitoso',
+		});
+	} catch (error) {
+		req.logger.fatal(
+			'Failed to render the success payment information page.'
+		);
+		res.status(500).send(`Error interno del servidor: ${error}`);
+	}
+};

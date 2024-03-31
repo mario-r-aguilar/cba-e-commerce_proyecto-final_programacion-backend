@@ -14,6 +14,9 @@ import {
 	renderResetPassPage,
 	renderAdminPage,
 	uploadUserFiles,
+	renderPaymentFailure,
+	renderPaymentPending,
+	renderPaymentSuccess,
 } from '../controllers/views.controller.js';
 
 const viewsRouter = Router();
@@ -70,6 +73,24 @@ viewsRouter.get(
 	passport.authenticate('current', { session: false }),
 	roleControl('USER', 'PREMIUM'),
 	uploadUserFiles
+);
+
+viewsRouter.get(
+	'/paymentsuccess',
+	passport.authenticate('current', { session: false }),
+	renderPaymentSuccess
+);
+
+viewsRouter.get(
+	'/paymentfailure',
+	passport.authenticate('current', { session: false }),
+	renderPaymentFailure
+);
+
+viewsRouter.get(
+	'/paymentpending',
+	passport.authenticate('current', { session: false }),
+	renderPaymentPending
 );
 
 export { viewsRouter };
